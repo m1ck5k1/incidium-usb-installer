@@ -1,0 +1,12 @@
+### Created: 12/08/22
+### Updated: 14/08/22
+
+# Uncomment/Add the relevant line depending on your specific requirements. Each
+# line will re-point the local machine to the relevant IP address of onsite2www 
+
+### DEV
+192.168.86.3		onsite2www.incidium.net		# Hackberry Hill Rd (LAN IP)
+
+### PROD
+#74.89.154.92		onsite2www.incidium.net		# Hackberry Hill Rd (WAN IP)
+#xxx.xxx.xxx.xxx	onsite2www.incidium.net		# xxx Event

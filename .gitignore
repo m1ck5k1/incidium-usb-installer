@@ -1,0 +1,20 @@
+# Binaries — too large for GitHub, hosted in Google Drive
+engine/*.exe
+engine/*.msi
+engine/*.zip
+engine/argus.exe
+engine/ChromeStandaloneSetup64.exe
+engine/vlc-3.0.20-win64.exe
+engine/incidium-remote-access.msi
+engine/tightvnc-2.8.63-gpl-setup-64bit.msi
+engine/TeamViewer_Host_Setup.exe
+engine/OpenSSH-Win64.zip
+
+# CMS player runtime — 1.2GB, hosted in Google Drive
+engine/snake-speare-v6/
+
+# BGInfo overlay
+engine/BGInfo/
+
+# Local config
+.drive-ref.json
