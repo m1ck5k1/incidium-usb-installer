@@ -1,0 +1,37 @@
+[Fri 06/12/2026 12:47:48.97] ===== TightVNC Fix Started ===== 
+[Fri 06/12/2026 12:47:48.97] Target: 2MO41434WR 
+[Fri 06/12/2026 12:47:48.98] USB: D: 
+[Fri 06/12/2026 12:47:49.00] Admin check: OK 
+[Fri 06/12/2026 12:47:49.02] TightVNC Server service: found 
+The operation completed successfully.
+The operation completed successfully.
+The operation completed successfully.
+The operation completed successfully.
+[Fri 06/12/2026 12:47:49.07] Registry fixes: applied 
+
+HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server
+    AcceptSocketConnections    REG_DWORD    0x1
+
+
+HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server
+    LoopbackOnly    REG_DWORD    0x0
+
+
+HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server
+    ConnectPriority    REG_DWORD    0x0
+
+
+HKEY_LOCAL_MACHINE\SOFTWARE\TightVNC\Server
+    CaptureMethod    REG_DWORD    0x1
+
+[Fri 06/12/2026 12:47:49.13] Registry verification: done 
+[Fri 06/12/2026 12:47:49.14] Stopping tvnserver... 
+The TightVNC Server service is stopping..
+The TightVNC Server service was stopped successfully.
+
+[Fri 06/12/2026 12:47:51.67] Starting tvnserver... 
+The TightVNC Server service is starting.
+The TightVNC Server service was started successfully.
+
+        STATE              : 4  RUNNING 
+[Fri 06/12/2026 12:47:53.74] Service restart: done 

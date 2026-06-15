@@ -1,4 +1,4 @@
-# Binaries — too large for GitHub, hosted in Google Drive
+# Binaries
 engine/*.exe
 engine/*.msi
 engine/*.zip
@@ -9,12 +9,11 @@ engine/incidium-remote-access.msi
 engine/tightvnc-2.8.63-gpl-setup-64bit.msi
 engine/TeamViewer_Host_Setup.exe
 engine/OpenSSH-Win64.zip
-
-# CMS player runtime — 1.2GB, hosted in Google Drive
 engine/snake-speare-v6/
-
-# BGInfo overlay
 engine/BGInfo/
-
-# Local config
 .drive-ref.json
+System Volume Information/
+device-*/
+_incidium_installer_venetian.bat
+_incidium_uninstaller_venetian.bat
+engine/debug.log
