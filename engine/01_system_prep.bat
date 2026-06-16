@@ -70,8 +70,17 @@ echo [2] Applying registry tweaks (kiosk mode, UAC, auto-logon)...
 call "%ENGINE%\reg-tweaks.cmd"
 echo [%DATE% %TIME%] Registry tweaks applied >> %LOGFILE%
 
-REM --- Step 2a: Disable OneDrive ---
-echo [2a] Disabling OneDrive...
+REM --- Step 2a: Clean taskbar ---
+echo [2a] Cleaning taskbar (unpin apps, hide widgets)...
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsFeeds" /v EnableFeeds /t REG_DWORD /d 0 /f >> %LOGFILE% 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v AllowNewsAndInterests /t REG_DWORD /d 0 /f >> %LOGFILE% 2>&1
+powershell.exe -ExecutionPolicy Bypass -Command ^
+    "$tb=\"$env:APPDATA\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\"; ^
+     if(Test-Path $tb) { Remove-Item \"$tb\*\" -Force -ErrorAction SilentlyContinue }" >> %LOGFILE% 2>&1
+echo [2a] Taskbar cleaned.
+
+REM --- Step 2b: Disable OneDrive ---
+echo [2b] Disabling OneDrive...
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v DisableFileSyncNGSC /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
 taskkill /f /im OneDrive.exe >nul 2>&1
 if exist "%WINDIR%\SysWOW64\OneDriveSetup.exe" "%WINDIR%\SysWOW64\OneDriveSetup.exe" /uninstall >nul 2>&1
@@ -92,7 +101,15 @@ powershell.exe -ExecutionPolicy Bypass -Command ^
     "$a=New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c if exist \"C:\Program Files (x86)\Microsoft\Edge\Application\setup.exe\" (\"C:\Program Files (x86)\Microsoft\Edge\Application\setup.exe\" --uninstall --force-uninstall --system-level) else (for /d %%d in (\"C:\Program Files (x86)\Microsoft\Edge\Application\*\") do if exist \"%%d\setup.exe\" (\"%%d\setup.exe\" --uninstall --force-uninstall --system-level))'; ^
      $t=New-ScheduledTaskTrigger -Daily -At 03:00; ^
      Register-ScheduledTask -TaskName 'Remove Edge Update' -Action $a -Trigger $t -RunLevel Highest -Force" >> %LOGFILE% 2>&1
-echo [2c] Edge removal task created.
+echo [2b] Edge removal task created.
+
+REM --- Step 2d: Set date/time format to 24hr + DD-MM-YY ---
+echo [2d] Setting date/time format...
+reg add "HKCU\Control Panel\International" /v sTime /t REG_SZ /d "HH:mm" /f >> %LOGFILE% 2>&1
+reg add "HKCU\Control Panel\International" /v sShortDate /t REG_SZ /d "dd-MM-yy" /f >> %LOGFILE% 2>&1
+reg add "HKCU\Control Panel\International" /v iTime /t REG_SZ /d 1 /f >> %LOGFILE% 2>&1
+reg add "HKCU\Control Panel\International" /v iTLZero /t REG_SZ /d 1 /f >> %LOGFILE% 2>&1
+echo [2d] 24hr time + DD-MM-YY set.
 
 REM --- Step 3: Import Incidium power plan ---
 echo [3] Importing Incidium power plan...
