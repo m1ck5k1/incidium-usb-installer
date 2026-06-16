@@ -46,7 +46,7 @@ REM --- Step 2: Create SnakeCharmer scheduled task (auto-start, auto-restart) --
 echo [2] Creating SnakeCharmer scheduled task...
 echo [%DATE% %TIME%] Creating scheduled task... >> %LOGFILE%
 powershell.exe -ExecutionPolicy Bypass -Command ^
-    "$u=$env:USERDOMAIN+'\'+$env:USERNAME; ^
+    "$u=$env:USERNAME; ^
      $a=New-ScheduledTaskAction -Execute 'C:\SnakeSpeareV6\SnakeCharmer.exe' -WorkingDirectory 'C:\SnakeSpeareV6'; ^
      $t=New-ScheduledTaskTrigger -AtLogOn -User $u; ^
      $p=New-ScheduledTaskPrincipal -UserId $u -LogonType Interactive -RunLevel Limited; ^
