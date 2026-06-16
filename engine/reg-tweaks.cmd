@@ -23,8 +23,8 @@ echo  Taskbar: disable notifications area
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v EnableAutoTray /t REG_DWORD /d 0 /f >nul 2>&1
 
 REM --- KIOSK MODE: Desktop ---
-echo  Desktop: black background
-reg add "HKCU\Control Panel\Colors" /v Background /t REG_SZ /d "0 0 0" /f >nul 2>&1
+echo  Desktop: dark grey background (48,48,48)
+reg add "HKCU\Control Panel\Colors" /v Background /t REG_SZ /d "48 48 48" /f >nul 2>&1
 
 echo  Desktop: remove wallpaper
 reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "" /f >nul 2>&1
