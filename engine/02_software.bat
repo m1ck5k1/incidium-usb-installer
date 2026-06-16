@@ -33,12 +33,19 @@ if exist "%ENGINE%\ChromeStandaloneSetup64.exe" (
     if %ERRORLEVEL% EQU 0 (
         echo [1] Chrome installed.
     ) else (
-        echo [1] WARNING: Chrome installer returned error %ERRORLEVEL%.
+        echo [1] Chrome standalone failed (may be untagged). Trying Enterprise MSI...
+        powershell.exe -ExecutionPolicy Bypass -Command ^
+            "curl.exe -o C:\Windows\Temp\chrome.msi 'https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi' 2>&1; ^
+             msiexec /i C:\Windows\Temp\chrome.msi /quiet /norestart 2>&1 | findstr -i success" >> %LOGFILE% 2>&1
+        if exist "C:\Program Files\Google\Chrome\Application\chrome.exe" (
+            echo [1] Chrome installed (Enterprise MSI).
+        ) else (
+            echo [1] WARNING: Chrome install failed. Attempting choco fallback...
+            choco install googlechrome -y --ignore-checksums >> %LOGFILE% 2>&1
+        )
     )
 ) else (
-    echo [1] WARNING: ChromeStandaloneSetup64.exe not found, attempting choco...
-    REM Fallback: try chocolatey if drive has internet
-    choco install googlechrome -y --ignore-checksums >> %LOGFILE% 2>&1
+    echo [1] WARNING: ChromeStandaloneSetup64.exe not found on USB.
 )
 echo.
 

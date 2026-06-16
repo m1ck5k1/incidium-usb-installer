@@ -68,7 +68,31 @@ echo [1b] Temp files purged.
 REM --- Step 2: Apply registry tweaks ---
 echo [2] Applying registry tweaks (kiosk mode, UAC, auto-logon)...
 call "%ENGINE%\reg-tweaks.cmd"
-echo [2] Registry tweaks applied.
+echo [%DATE% %TIME%] Registry tweaks applied >> %LOGFILE%
+
+REM --- Step 2a: Disable OneDrive ---
+echo [2a] Disabling OneDrive...
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v DisableFileSyncNGSC /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
+taskkill /f /im OneDrive.exe >nul 2>&1
+if exist "%WINDIR%\SysWOW64\OneDriveSetup.exe" "%WINDIR%\SysWOW64\OneDriveSetup.exe" /uninstall >nul 2>&1
+echo [2a] OneDrive disabled.
+
+REM --- Step 2b: Disable Microsoft Edge ---
+echo [2b] Disabling Microsoft Edge...
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main" /v PreventFirstRunPage /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge" /v HideFirstRunExperience /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main" /v AllowPrelaunch /t REG_DWORD /d 0 /f >> %LOGFILE% 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v DisableEdgeDesktopShortcutCreation /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\EdgeUpdate" /v DoNotUpdateToEdgeWithChromium /t REG_DWORD /d 1 /f >> %LOGFILE% 2>&1
+echo [2b] Edge disabled via policy.
+
+REM --- Step 2c: Scheduled task to remove Edge if reinstalled by Windows Update ---
+echo [2c] Creating Edge removal scheduled task...
+powershell.exe -ExecutionPolicy Bypass -Command ^
+    "$a=New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c if exist \"C:\Program Files (x86)\Microsoft\Edge\Application\setup.exe\" (\"C:\Program Files (x86)\Microsoft\Edge\Application\setup.exe\" --uninstall --force-uninstall --system-level) else (for /d %%d in (\"C:\Program Files (x86)\Microsoft\Edge\Application\*\") do if exist \"%%d\setup.exe\" (\"%%d\setup.exe\" --uninstall --force-uninstall --system-level))'; ^
+     $t=New-ScheduledTaskTrigger -Daily -At 03:00; ^
+     Register-ScheduledTask -TaskName 'Remove Edge Update' -Action $a -Trigger $t -RunLevel Highest -Force" >> %LOGFILE% 2>&1
+echo [2c] Edge removal task created.
 
 REM --- Step 3: Import Incidium power plan ---
 echo [3] Importing Incidium power plan...

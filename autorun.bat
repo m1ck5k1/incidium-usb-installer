@@ -99,7 +99,7 @@ call :capture_logs
 REM ===== PHASE 3: Fleet Agent (Argus) =====
 echo.
 echo ================ PHASE 3/6: Fleet Agent ================
-call "%ENGINE%\04_agent.bat"
+call "%ENGINE%\03_agent.bat"
 if %ERRORLEVEL% NEQ 0 (
     set PHASE3_STATUS=FAIL
     echo [WARN] Phase 3 had errors. Continuing...
@@ -109,7 +109,7 @@ call :capture_logs
 REM ===== PHASE 4: CMS Player =====
 echo.
 echo ================ PHASE 4/6: CMS Player ================
-call "%ENGINE%\03_cms_player.bat"
+call "%ENGINE%\04_cms_player.bat"
 if %ERRORLEVEL% NEQ 0 (
     set PHASE4_STATUS=FAIL
     echo [WARN] Phase 4 had errors. Continuing...
